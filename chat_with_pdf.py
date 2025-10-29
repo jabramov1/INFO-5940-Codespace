@@ -71,7 +71,7 @@ if uploaded_files:
                 chunks = text_splitter.split_documents(documents)
                 all_chunks.extend(chunks)
                 
-                #cleanup as recommended
+                #close the file. Chatgpt recommneded using with
                 os.remove(tmp_file_path)
             
             # Create vector store from ALL chunks
