@@ -1,92 +1,96 @@
-# INFO 5940 
-Welcome to the INFO 5940 repository. You will complete your work using [**GitHub Codespaces**](#about-github-codespaces) and save your progress in your own GitHub repository. This guide will walk you through setting up the development environment and running the test notebook.  
+# RAG-Based Document Q&A Application
 
-## Getting Started 
+## Overview
 
-### Step 1: Fork this repository 
-1. Click the **Fork** button (top right of this page).
-2. This will create a copy of the repo under **your own GitHub account**.
+This application allows users to upload multiple texts files and pdf files and md files and ask questions about their content using a Retrieval-Augmented Generation (RAG) pipeline. The system breaks documents into chunks, stores them in a vector database, and uses semantic search to find relevant information before generating answers by finding the top 20 most relevant chunks.
 
-Forking creates a personal copy of the repo under **your** GitHub account.  
-- You can commit, push, and experiment freely.  
-- Your work stays separate from the official class materials.
+## Features
 
-### Step 2: Open your forked repo Codespace
-1. Go to **your forked repo**.
-2. Click the green **Code** button and switch to the **Codespaces** tab.  
-3. Select **Create Codespace**.
-4. Wait a few minutes for the environment to finish setting up.
+The user uploads a .txt, .md, or .pdf file or a combo or all 3 and the app breaks the docs into small pieces, finds the most relevant parts, and answers using only those in a chat that remembers your conversation.
+It also caches files so they aren’t reprocessed each time.
 
-### Step 3: Verify your environment 
-Once the Codespace is ready: 
-1. If you are in `<your-file-name>.ipynb` in your codespace.
-2. Install the Python 3.11.13 Kernel.  In the top-right corner, click **Select Kernel**.
-    1. If **Install/Enable suggested extensions Python + Jupyter** appears, select it, and wait for the install to finish before moving on to the next step.
-    2. Select **Python Environments** choose **Python 3.11.13 (first option)**.
-3. Run the code block to check your setup. 
+## How to Run
 
-## About GitHub Codespaces
+### Prerequisites
+- API key
 
-[Codespaces](https://docs.github.com/en/codespaces) is a complete software development and execution environment, running in the cloud, with its primary interface being a VSCode instance running in your browser.
+### Steps to Run
 
-Codespaces is not free, but their per-month [free quota](https://docs.github.com/en/billing/concepts/product-billing/github-codespaces#free-quota) is generous.  Codespaces is free under the [GitHub Student Developer Pack](https://education.github.com/pack#github-codespaces).
+1. **Open your Codespace** from your forked repository on the `assignment1` branch
 
-### Codespaces Tips
+2. **Open the terminal** in Codespace
 
-* Codespaces keep running even when you close your browser (but will time out and stop after a while)
-* Unless you're on a free plan, or within your free quota, costs acrue while the codespace is running, whether or not you have it open in your browser or are working on it
-* You can control when it's running, and the space it takes up.  Check out [GitHub's codespaces lifecycle documentation](https://docs.github.com/en/codespaces/about-codespaces/understanding-the-codespace-lifecycle)
+3. **Set your API key**:
+```bash
+   export API_KEY="your_api_key_here"
+```
 
-## Sync Updates 
-To make sure your personal forked repository stays up to date with the original class repository, please follow these steps:
-1. Open your forked repo.
-2. At the top of the page, you should see a banner or menu option that shows whether your fork is behind the original repo.
-3. Click the **Sync fork** button.
-4. In the dropdown, choose **Update branch** to pull the latest changes from the original repo into your fork.
+4. **Run the Streamlit application**:
+```bash
+   streamlit run chat_with_pdf.py
+```
 
-Optionally, you can also follow these steps to create a new branch on your fork:
-1. Open your **forked repository** on GitHub.  
-2. At the top of the page, next to the branch dropdown, click the **Branches** button.  
-3. In the **Branches** view, click the green **New Branch** button.  
-4. In the popup window, enter a branch name.  
-   - You can use any name you like, but it’s recommended to match the branch name used in class for better organization.  
-5. Under **Branch source**, select:  
-   - **Repository:** `AyhamB/INFO-5940-Codespace`  
-   - **Branch:** choose the branch you want to sync from (e.g., `streamlit`).  
-6. Click the green **Create New Branch** button.  
-7. Verify that you’re now back in **your fork**, on the new branch you just created.  
-8. Click the **Code** button and create a new Codespace (if you don’t already have one).  
-   - Make sure the Codespace is created from the **current branch**.
-  
-## Running a Streamlit App on Codespaces  
-Follow these steps to launch and view your Streamlit app in GitHub Codespaces:
-1. **Open the terminal** inside your Codespace.
-2. Run the command:  
-   ```bash
-   streamlit run your-file-name.py
-   ```  
-   **(Replace `your-file-name.py` with the actual name of your Streamlit app file, e.g., `hello_app.py`.)**
-3. After pressing **Enter**, a popup should appear in the bottom-right corner of Codespace editor.  
-   - Click **“Open in Browser”** to view your app.  
+5. **Open the application**: Click "Open in Browser" when the popup appears in the bottom-right corner
 
-   ⚠️ *If you miss the popup:*  
-   - Press **Ctrl + C** in the terminal to stop the app.  
-   - Rerun the command from step 2 — the popup should appear again.
-4. A new browser tab will open, showing the interface of your Streamlit app.
-5. **Make changes to your code** in the Codespace editor.  
-   - Refresh the browser tab to see the updated version of your app.  
+6. **Use the application**:
+   - Upload one or more documents (.txt, .md, or .pdf)
+   - Wait for processing to complete
+   - Ask questions about your documents in the chat interface
 
-## Setting Your API Key in GH Codespaces
-You will receive an individual API Key for class assignments. To prevent accidental exposure online, please follow the steps below to securely insert your key in the terminal.
-1. **Open the terminal** inside your Codespace.
-2. Run the command to temporarily set your API Key for this session:  
-   ```bash
-   export API_KEY="your_actual_API_KEY"
-   ```
-3. If you want to run the Streamlit app and set up the key at the same time, run both commands together:
-   ```bash
-   API_KEY="your_actual_API_KEY" streamlit run your-file-name.py
-   ```
+## Implementation Details
 
-## Troubleshooting
-- The Jupyter extension should install automatically. If you still cannot select a Python kernel on Jupyter Notebook: Go to the left sidebar >> **Extensions** >> search for **Jupyter** >> reload window (or reinstall it).   
+### Code Implementation
+
+The original starter code (`chat_with_pdf.py`) was a simple file Q&A application that 
+- Only supported single .txt file uploads
+- Read the entire file content and passed an directly to the LLM 
+- No document chunking or vector search (NO RAG IMPLEMENTATION)
+
+The new and improved enhanced version implements a full RAG pipeline with the following improvement that uses the chunking method that is shown in the notebook:
+
+**PDF Support**: Added support for PDF files using LangChain's `PyPDFLoader`. The original code only handled text files that could be decoded directly as UTF-8 strings.
+
+**Multiple File Uploads**: Modified the file uploader to accept multiple files simultaneously with the `accept_multiple_files=True` parameter. All uploaded documents are processed together and can be queried as a single knowledge base.
+
+**RAG Pipeline Implementation**: The core enhancement is the implementation of a complete RAG system with three main components:
+
+**Document Chunking**: I split documents into smaller pieces using `RecursiveCharacterTextSplitter` with a chunk size of 200 characters and no overlap. This is the same approach from the class notebook. Breaking documents into chunks lets the system work with large files and find just the relevant sections for each question.
+
+**Vector Storage**: Each chunk gets converted into an embedding using OpenAI's text-embedding-3-large model and stored in a ChromaDB vector database. This makes it possible to search for chunks that are semantically similar to the user's question.
+
+**Retrieval and Generation**: When someone asks a question, the system finds the 20 most similar chunks (I used k=20 like in the notebook example). These chunks get formatted as context and sent to GPT-4o along with the question. The model then generates an answer based on what it finds in those chunks.
+
+**Session State Management**: I added session state tracking for the vector database and the list of processed files. This gets used to save processing time because if we didn;t store the vectors in the database, o the app would have to recalculate all the embeddings and rebuild the entire vector database from scratch on every interaction, which would be really slow. By storing the vector database in session state, it only gets created once when files are first uploaded, then gets reused for all the questions.
+
+**Structured Prompting**: Uses LangChain's `PromptTemplate` following the same structure from the notebook.. This way the model only answers based only on the retrieved context and to say when it doesn't know something, instead of hallucianting an response.
+
+**File Handling**: Since LangChain's document loaders require file paths rather than byte streams, the application temporarily saves uploaded files using Python's `tempfile` module, loads them with the appropriate loader, then cleans up the temporary files after processing.
+
+### Technical Stack
+
+- **Streamlit**: Web interface and file upload handling
+- **LangChain**: RAG pipeline framework (document loaders, text splitters, prompt templates)
+- **ChromaDB**: Vector database for similarity search
+- **OpenAI**: Language model (gpt-4o) and embeddings (text-embedding-3-large)
+
+### Architecture
+
+The application follows this flow:
+1. User uploads documents through Streamlit interface
+2. Documents are saved temporarily and loaded with appropriate LangChain loaders
+3. Documents are split into 200-character chunks
+4. Chunks are embedded and stored in ChromaDB vector store
+5. When user asks a question, the system retrieves the 20 most similar chunks
+6. Retrieved chunks are formatted as context and passed to the LLM with the question
+7. LLM generates an answer based only on the retrieved context
+
+## Configuration
+
+No changes were made to `requirements.txt` or `.devcontainer` configurations. All necessary dependencies were already included in the provided Codespace template.
+
+## File Structure
+```
+chat_with_pdf.py    # Main application file
+README.md           # This file
+ref-log.md          # Reference log documenting sources and AI usage
+```
