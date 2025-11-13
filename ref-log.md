@@ -1,1 +1,11 @@
+# Reflection: Multi-Agent Travel Planner
 
+
+I designed the Planner and Reviewer prompts using my own structure and ideas, then used ChatGPT only to help clean up the phrasing and formatting. After loading them into the Streamlit app, I saw that the first versions produced a working multi agent pipeline, but the outputs were messy and inconsistent. This assignment pushed me to treat prompt design as a real engineering task, not as a one shot instruction. I realized it is a lot of trial and error.
+
+
+The main problem came from text formatting. The Reviewer sometimes produced broken words, strange spacing, and odd Markdown. I noticed that currency symbols and emphasis markers caused words to split and lines to render in strange ways. To fix this, I added strict formatting rules to both agents. Day headers stay bold or use markdown headers. Activity lines stay plain text only, with no italics or bold and no emphasis around prices or place names. I also asked for normal spacing after punctuation. After these changes, the itineraries became much cleaner and easier to read.
+
+I encoutner another problem with the structure and coverage of the final prompt. Early Reviewer prompts sometimes skipped days, merged multiple days into a loose summary, or reshaped the trip too much. I tightened the Reviewer prompt so the model must always output three sections in order, Validation Summary, Delta List, and Revised Itinerary. I required one revised entry for every day in the Planner output, with clear morning, afternoon, and evening activities and rough costs. I also stressed that the Reviewer should use the internet_search tool for targeted checks, then apply small, concrete changes instead of rebuilding everything.
+
+From this work, I learned to write prompts that specify format, structure, and behavior very tightly. Small gaps in instructions led to visible BIG flaws in the final app. Clear formatting rules and explicit output contracts made the Planner and Reviewer easier to control and easier for a user to trust.
